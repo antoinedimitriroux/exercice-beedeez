@@ -4,7 +4,7 @@ Pour cet exercice vous devrez créer une application listant différentes leçon
 
 La route devant être utilisée est la suivante :
 
-    GET https://www.beedeez.com/api/v1/public/lessons/200/1
+    GET https://api.beedeez.com/api/v1/public/lessons/200/1
 
 Pour cela vous devrez impérativement utiliser les technologies suivantes:
 
