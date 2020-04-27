@@ -30,7 +30,6 @@ Chaque fonctionnalité supplémentaire sera prise en compte en tant que BONUS ! 
 
 - Implémentation de [Jest](http://facebook.github.io/jest/) pour faire des tests unitaires en react
 - Implémentation de [eslint](https://eslint.org/) pour normaliser le code
-- Implémenter [Flow](https://flow.org/) pour typer l'application (bon courage pour celle là x') )
 - Implémenter un système de pagination (vous récupérez 200 leçons). (Attention à ne pas casser la recherche).
 - Implémentation de [i18next](https://www.i18next.com/) pour traduire votre app.
 
