@@ -14,6 +14,8 @@ Pour cela vous devrez impérativement utiliser les technologies suivantes:
 - [webpack](https://webpack.github.io/) & [babel](https://babeljs.io/)
 
 Pour faciliter le setup du projet, nous suggerons de se baser sur https://github.com/facebookincubator/create-react-app
+ou 
+https://github.com/grabcode/react-native-web-starter
 
 Chaque fonctionnalité supplémentaire sera prise en compte en tant que BONUS ! Alors lâchez-vous ;)
 
