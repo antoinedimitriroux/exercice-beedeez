@@ -13,9 +13,7 @@ Pour cela vous devrez impérativement utiliser les technologies suivantes:
 - [redux](http://redux.js.org/) & [react-redux](https://github.com/reactjs/react-redux)
 - [webpack](https://webpack.github.io/) & [babel](https://babeljs.io/)
 
-Pour faciliter le setup du projet, nous suggerons de se baser sur https://github.com/facebookincubator/create-react-app
-ou 
-https://github.com/grabcode/react-native-web-starter
+Pour faciliter le setup du projet, nous suggerons de se baser sur create-react-native-web-app
 
 Chaque fonctionnalité supplémentaire sera prise en compte en tant que BONUS ! Alors lâchez-vous ;)
 
