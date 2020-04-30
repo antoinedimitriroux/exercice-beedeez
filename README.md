@@ -33,6 +33,8 @@ Chaque fonctionnalité supplémentaire sera prise en compte en tant que BONUS ! 
 - Implémenter un système de pagination (vous récupérez 200 leçons). (Attention à ne pas casser la recherche).
 - Implémentation de [i18next](https://www.i18next.com/) pour traduire votre app.
 
+https://reactnative.dev/docs/height-and-width
+
 pour nous envoyer votre résultat, merci de soumettre une Pull Request sur le projet actuel.
 En cas de questions, vous pouvez créer une issue sur le projet.
 
