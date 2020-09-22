@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, PureComponent, Component, useState } from 'react';
 import { Animated, FlatList, SafeAreaView, TextInput, Keyboard, Dimensions, Slider, Picker, TouchableHighlight, StatusBar, Switch, ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
 import { Constants } from 'expo';
+import { AsyncStorage } from "react-native";
 
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Highlighter from 'react-native-highlight-words';
-import { AsyncStorage } from "react-native";
+
+import { SketchPicker, CompactPicker, GithubPicker } from 'react-color';
 
 //TOUTES LES VARIABLES DONT ON A BESOIN POUR L'APPLICATION
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -16,16 +18,15 @@ var radioButtonProperties = [
 ];
 
 //CAPSULES EST UN TABLEAU QUI VA CONTENIR TOUTES LES CAPSULES SOUS FORME D'OBJETS
-var capsules = [];
+var capsules = null;
 
 //WORDS EST UN TABLEAU QUI VA CONTENIR TOUS LES MOTS DES CAPSULES
 //ON EN A BESOIN POUR FAIRE DES SUGGESTIONS QUAND L'UTILISATEUR EFFECTUE UNE REQUETE
-var words = [];
+var words = null;
 
 //DICTIONNAIRE EST UNE HASHAMAP STRING => [INT], QUI PREND EN ENTREE UN MOT,
 //ET RETOURNE LES INDICES DES CAPSULES CONTENANT CE MOT, OU NULL SI AUCUNE CAPSULE NE CONTIENT LE MOT
-var dictionnaire = {};
-dictionnaire[""] = [];
+var dictionnaire = null;
 
 function toString(e) {
   var propValue;
@@ -61,14 +62,50 @@ export default class App extends PureComponent {
 
       leftMenuPosition: -screenWidth * 0.7,
 
+      backgroundColor: "#0062B1",
+
+      fontColor: "#FCC400"
+
     };
   }
 
 
   //FONCTION APPELEE DES QUE TOUT EST PRET
   componentDidMount(){
-    //this.tryToGetDataFromLocal();
-    this.tryToGetDataFromInternetAndThenProcess();
+    this.tryToGetDataFromLocal();
+  }
+
+
+  tryToGetDataFromLocal = async () => {
+    //ON ESSAIE DE RECUPERER LES DONNEES EN LOCAL
+    try {
+      capsules = JSON.parse(await AsyncStorage.getItem("capsules"));
+      if (capsules == null){
+        throw 'Bad: capsules not in local';
+      }
+      else{
+        console.log("Good: capsules found in local");
+      }
+      dictionnaire = JSON.parse(await AsyncStorage.getItem("dictionnaire"));
+      if (dictionnaire == null){
+        throw 'Bad: dictionnaire not in local';
+      }
+      else{
+        console.log("Good: dictionnaire found in local");
+      }
+      words = JSON.parse(await AsyncStorage.getItem("words")); 
+      if (words == null){
+        throw 'Bad: words not in local!';
+      }
+      else{
+        console.log("Good: words found in local");
+      }
+    } catch (error) {
+      //UN DES OBJETS NECESSAIRES A L'APPLI N'A PAS ETE TROUVE EN LOCAL
+      //ON DOIT TELECHARGER LE FICHIER JSON CONTENANT LES DONNES, LE TRAVAILLER ET L'ENREGISTRER POUR LA PREMIERE FOIS
+      this.tryToGetDataFromInternetAndThenProcess();
+      return error;
+    }
   }
 
 
@@ -78,54 +115,19 @@ export default class App extends PureComponent {
     try {
         await AsyncStorage.setItem(key,data);
     } catch (error) {
-        // Error saving data
-    }
-  }
-
-  //FONCTION QUI PERMET DE RECUPERER DES DONNES EN LOCAL
-  _retrieveData = async (key) => {
-    try {
-      const value = await AsyncStorage.getItem(key);        
-      if (value !== null) {
-        return JSON.parse(value);   
-      }        
-    } catch (error) {
-        //this.tryToGetDataFromInternetAndThenProcess();
+        console.log("Bad: " + key);
         return error;
     }
   }
-
-
-  //FONCTION QU'ON APPELLE POUR ESSAYER DE RECUPERER LES DONNES CORRESPONDANT A NOS VARIABLES GLOBALES
-  //SI LES PROMESSES ECHOUENT, ON APPELLE ALORS LA FONCTION QUI RECUPERE LES DONNEES BRUTES SUR INTERNET, 
-  //PUIS LES TRAITE, ET LES ENREGISTRE EN LOCAL POUR PLUS TARD
-  tryToGetDataFromLocal = () => {
-
-    const promessCapsule = this._retrieveData('capsules');
-    const promessDictionnaire = this._retrieveData('dictionnaire');
-    const promessWords = this._retrieveData('words');
-    const promessEchec = null;
-
-    Promise.all([promessCapsule,promessDictionnaire,promessWords,promessEchec]).then(function(values){
-      console.log("capsules, dictionnaire et words disponibles en local");
-      capsules = values[0];
-      dictionnaire = values[1];
-      words = values[2];
-      console.log(values[3]);
-    }).catch(function(error){
-      tryToGetDataFromInternetAndThenProcess();
-    });
-
-
-
-  }
-
-
-
   //FONCTION QUI VA RECUPERER LE FICHIER DATA SUR LE SITE API DE BEEDEEZ
   //PUIS TRAITE CES DONNEES ET ENFIN LES ENREGISTRE EN LOCAL POUR PLUS TARD
   tryToGetDataFromInternetAndThenProcess = () => {
     console.log("capsules, dictionnaire et words pas disponibles en local");
+
+    capsules = [];
+    words = [];
+    dictionnaire = {};
+    dictionnaire[""] = [];
 
     //ON RECUPERE LE FICHIER TEXT/PLAIN QUI CONTIENT LES DONNESS
     fetch('https://api.beedeez.com/api/v1/public/lessons/200/1', {
@@ -202,6 +204,7 @@ export default class App extends PureComponent {
       }
 
       console.log("J'enregistre capsules, dictionnaire et words en local...");
+
       this._storeData('capsules',JSON.stringify(capsules));
       this._storeData('dictionnaire',JSON.stringify(dictionnaire));
       this._storeData('words',JSON.stringify(words));
@@ -209,6 +212,7 @@ export default class App extends PureComponent {
     })
     .catch((error) => {
        console.log("Vous n'avez pas de données en local, et vous n'êtes pas connecté à internet...");
+        console.log(error);
     });    
   }
 
@@ -348,13 +352,20 @@ export default class App extends PureComponent {
     }
   }
 
+  handleBackgroundColorChange = (color) => {
+    this.setState({ backgroundColor: color.hex });
+  };
+  handleFontColorChange = (color) => {
+    this.setState({ fontColor: color.hex });
+  };
+
   //FONCTION DE RENDU GRAPHIQUE
   render() {
 
 
     return (
 
-      <ScrollView style={styles.mainContainer}>
+      <ScrollView style={[styles.mainContainer, {backgroundColor: this.state.backgroundColor}]}>
 
         <View style={styles.loadingBlocker}></View>
 
@@ -369,8 +380,63 @@ export default class App extends PureComponent {
 
         <View
           style={this.leftMenuWrapperStyles()}>
-          <View style={styles.leftMenuInside}>
-          </View>
+          <ScrollView style={[styles.leftMenuInside, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor}]}>
+
+
+            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
+              <Text style={styles.subMenuTitle}>{"Compte"}</Text>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Un Switch qui fait des super trucs </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Un Switch qui fait des super trucs </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+            </View>
+
+            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
+              <Text style={styles.subMenuTitle}>{"Options"}</Text>
+
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Background Color </Text>
+                <CompactPicker
+                  style={styles.optionsSwitch}
+                  onChangeComplete={ this.handleBackgroundColorChange }>
+                </CompactPicker>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Text Color </Text>
+                <CompactPicker
+                  style={styles.optionsSwitch}
+                  onChangeComplete={ this.handleFontColorChange }>
+                </CompactPicker>
+              </View>
+
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Nightshift </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> 3D-capsules </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Audio-description </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Don't use local storage </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+              <View style={styles.submenuItem}>
+                <Text style={styles.optionsDescription}> Don't use internet </Text>
+                <Switch style={styles.optionsSwitch}></Switch>
+              </View>
+            </View>
+
+
+          </ScrollView>
           <TouchableOpacity 
             style={styles.leftMenuTransparentCloser}
             onPress = {() => {this.toggleLeftMenu();}}>
@@ -385,7 +451,7 @@ export default class App extends PureComponent {
         </FlatList>
 
         <TextInput
-          style={styles.flexTextInput}
+          style={[styles.flexTextInput, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, borderColor: this.state.fontColor, borderWidth: 6}]}
           maxLength={33}
           placeholderTextColor = "#888888ff"
           placeholder = {this.state.placeholder}
@@ -396,10 +462,10 @@ export default class App extends PureComponent {
         </TextInput>
 
         <FlatList
-          style={styles.capsuleLists}
+          style={[styles.capsuleLists, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor}]}
           data={this.state.data}
           renderItem = {item => (
-            <Highlighter style={styles.capsule} 
+            <Highlighter style={[styles.capsule, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor}]} 
               highlightStyle={{backgroundColor: 'yellow'}}
               searchWords={[this.state.request]}
               textToHighlight = 
@@ -415,7 +481,7 @@ export default class App extends PureComponent {
           )}>
         </FlatList>
 
-        <Text style = {styles.capsuleLists}>
+        <Text style = {[styles.capsuleLists, {color:this.state.fontColor}]}>
           {"  " + this.state.description}
         </Text>
 
@@ -468,12 +534,41 @@ const styles = StyleSheet.create({
     zIndex: 5
   },
   leftMenuInside:{
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: "wrap",
     position:"absolute",
     left:0,
     width:0.7 * screenWidth,
     height: screenHeight,
     backgroundColor: '#000000ff',
-    zIndex: 6
+    zIndex: 6,
+    paddingTop: 0.2 * screenHeight
+  },
+  subMenu:{
+    width:0.7 * screenWidth,
+    backgroundColor:'orange',
+    alignSelf: 'flex-start'
+  },
+  subMenuTitle:{
+    color:"black",
+    fontSize: 30,
+    fontWeight:'bold'
+  },
+  submenuItem:{
+    alignSelf: 'flex-start',
+    textAlign: 'center',
+    justifyContent: 'center',
+    minWidth:0.1 * screenWidth,
+    minHeight: 0.06 * screenWidth,
+    margin: 0.02 * screenHeight,
+    borderRadius: 0.015 * screenHeight,
+    backgroundColor: "white"
+  },
+  optionsDescription:{
+    color:"black"
+  },
+  optionsSwitch:{
   },
   leftMenuTransparentCloser:{
     position:"absolute",
@@ -491,7 +586,7 @@ const styles = StyleSheet.create({
     width: screenWidth - 80,
     height: screenHeight * 0.1,
     backgroundColor: '#112666ff',
-    fontSize: 22,
+    fontSize: 28,
     borderRadius: 10,
     color: "white"
   },
@@ -513,13 +608,14 @@ const styles = StyleSheet.create({
     flex:1,
     position:'relative',
     /*maxHeight:screenHeight - 280,*/
-    backgroundColor: '#228844ff',
     fontSize: 20,
     borderRadius: 10,
     marginTop:30,
     marginRight:10,
     marginLeft:10,
     marginBottom:-20,
+    padding: 0.02 * screenWidth,
+    borderWidth: 2
   },
   burger:{
     position:'absolute',
