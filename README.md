@@ -1,3 +1,13 @@
+# **Explications: quelques Bugs et problèmes**
+
+Bonjour!
+Cette application dispose de quelques bugs que je ne suis pas encore parvenu à résoudre:
+>Je n'ai pas pu uploader le dossier Node_modules, ma connexion étant trop nulle. Un npm install sur le projet devrait vous permettre d'obtenir tous les packages nécessaires au build et au fonctionnement de l'App.
+>Pour sélectionner un filtre de langue, il faut cliquer 2 fois sur un bouton, et non une fois
+>Pour ouvrir le menu d'options, il faut (parfois) cliquer 2 fois sur l'icone Beedeez en haut à gauche.
+>Normalement, lorsqu'on lance l'application, toutes les capsules devraient s'afficher, au lieu d'aucune.
+>Chers utilisateurs, ces bugs devraient résolus d'ici peu :)
+
 # **Evaluation compétence / entretien Beedeez**
 
 Pour cet exercice vous devrez créer une application listant différentes leçons (appelées "capsules"). Pour cela, vous devrez faire une requête sur la route d'API fournie, stocker les capsules dans un reducer ([redux](http://redux.js.org/)) et afficher les capsules sur la page. Une fonctionnalité devra être mise en place pour rechercher une capsule sur la page via une barre de recherche.
