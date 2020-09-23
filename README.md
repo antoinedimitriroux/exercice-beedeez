@@ -4,13 +4,13 @@ Bonjour!
 
 Cette application dispose de quelques bugs que je ne suis pas encore parvenu à résoudre:
 
->Pour sélectionner un filtre de langue, il faut cliquer 2 fois sur un bouton, et non une fois
+Pour sélectionner un filtre de langue, il faut cliquer 2 fois sur un bouton, et non une fois
 
->Pour ouvrir le menu d'options, il faut (parfois) cliquer 2 fois sur l'icone Beedeez en haut à gauche.
+Pour ouvrir le menu d'options, il faut (parfois) cliquer 2 fois sur l'icone Beedeez en haut à gauche.
 
->Normalement, lorsqu'on lance l'application, toutes les capsules devraient s'afficher, au lieu d'aucune.
+Normalement, lorsqu'on lance l'application, toutes les capsules devraient s'afficher, au lieu d'aucune.
 
->Je n'ai pas pu uploader le dossier Node_modules, ma connexion étant trop nulle.
+Je n'ai pas pu uploader le dossier node_modules, ma connexion étant trop nulle.
 
     L'app utilise les packages suivant:
     
@@ -26,7 +26,7 @@ Cette application dispose de quelques bugs que je ne suis pas encore parvenu à 
         
         import Highlighter from 'react-native-highlight-words';
         
->Chers utilisateurs, ces bugs devraient résolus d'ici peu :)
+Chers utilisateurs, ces bugs devraient résolus d'ici peu :)
 
 
 # **Evaluation compétence / entretien Beedeez**
