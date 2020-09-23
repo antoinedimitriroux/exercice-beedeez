@@ -2,10 +2,17 @@
 
 Bonjour!
 Cette application dispose de quelques bugs que je ne suis pas encore parvenu à résoudre:
->Je n'ai pas pu uploader le dossier Node_modules, ma connexion étant trop nulle. Un npm install sur le projet devrait vous permettre d'obtenir tous les packages nécessaires au build et au fonctionnement de l'App.
 >Pour sélectionner un filtre de langue, il faut cliquer 2 fois sur un bouton, et non une fois
 >Pour ouvrir le menu d'options, il faut (parfois) cliquer 2 fois sur l'icone Beedeez en haut à gauche.
 >Normalement, lorsqu'on lance l'application, toutes les capsules devraient s'afficher, au lieu d'aucune.
+>Je n'ai pas pu uploader le dossier Node_modules, ma connexion étant trop nulle.
+    L'app utilise les packages suivant:
+        import React, { useRef, useEffect, PureComponent, Component, useState } from 'react';
+        import { Animated, FlatList, SafeAreaView, TextInput, Keyboard, Dimensions, Slider, Picker, TouchableHighlight, StatusBar, Switch, ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
+        import { Constants } from 'expo';
+        import { AsyncStorage } from "react-native";
+        import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+        import Highlighter from 'react-native-highlight-words';
 >Chers utilisateurs, ces bugs devraient résolus d'ici peu :)
 
 # **Evaluation compétence / entretien Beedeez**
