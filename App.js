@@ -385,53 +385,18 @@ export default class App extends PureComponent {
 
             <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
               <Text style={styles.subMenuTitle}>{"Compte"}</Text>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Un Switch qui fait des super trucs </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Un Switch qui fait des super trucs </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
             </View>
 
             <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
               <Text style={styles.subMenuTitle}>{"Options"}</Text>
-
               <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Background Color </Text>
-                <CompactPicker
-                  style={styles.optionsSwitch}
-                  onChangeComplete={ this.handleBackgroundColorChange }>
-                </CompactPicker>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Text Color </Text>
-                <CompactPicker
-                  style={styles.optionsSwitch}
-                  onChangeComplete={ this.handleFontColorChange }>
-                </CompactPicker>
-              </View>
-
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Nightshift </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> 3D-capsules </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Audio-description </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Don't use local storage </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
-              </View>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Don't use internet </Text>
-                <Switch style={styles.optionsSwitch}></Switch>
+                <Text style={styles.optionsDescription}> Theme Choser </Text>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"black", borderColor:"white"}]} onPress={()=>{this.setState({backgroundColor:"black" , fontColor:"white" })}}  ></TouchableOpacity>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"white", borderColor:"black"}]} onPress={()=>{this.setState({backgroundColor:"white" , fontColor:"black" })}}  ></TouchableOpacity>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"yellow",borderColor:"blue"}]} onPress={()=>{this.setState({backgroundColor:"yellow" , fontColor:"blue" })}}   ></TouchableOpacity>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"blue",  borderColor:"yellow"}]} onPress={()=>{this.setState({backgroundColor:"blue" , fontColor:"yellow" })}} ></TouchableOpacity>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"green", borderColor:"red"}]}   onPress={()=>{this.setState({backgroundColor:"green" , fontColor:"red" })}}    ></TouchableOpacity>
+                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"red",   borderColor:"green"}]}   onPress={()=>{this.setState({backgroundColor:"red" , fontColor:"green" })}}  ></TouchableOpacity>
               </View>
             </View>
 
@@ -567,6 +532,12 @@ const styles = StyleSheet.create({
   },
   optionsDescription:{
     color:"black"
+  },
+  themeChoser:{
+    width:40,
+    height:40,
+    borderWidth:20,
+    borderRadius:20
   },
   optionsSwitch:{
   },
