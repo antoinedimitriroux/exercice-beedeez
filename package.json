@@ -22,6 +22,7 @@
     "ent": "^2.2.0",
     "expo": "~37.0.9",
     "expo-asset": "~8.1.0",
+    "expo-blur": "~8.1.0",
     "expo-constants": "~9.0.0",
     "expo-font": "~8.1.0",
     "expo-image-picker": "^9.1.1",
