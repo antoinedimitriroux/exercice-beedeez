@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, PureComponent, Component, useState } from 'react';
 import { Animated, FlatList, SafeAreaView, TextInput, Keyboard, Dimensions, Slider, Picker, TouchableHighlight, StatusBar, Switch, ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
-import { Constants } from 'expo';
-import { AsyncStorage } from "react-native";
-
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import Constants from 'expo';
+import AsyncStorage from "react-native";
+import RadioForm from 'react-native-simple-radio-button';
 import Highlighter from 'react-native-highlight-words';
+import VerticalSlider from 'rn-vertical-slider';
+import DatePicker from 'react-native-datepicker';
 
-import { SketchPicker, CompactPicker, GithubPicker } from 'react-color';
 
 //TOUTES LES VARIABLES DONT ON A BESOIN POUR L'APPLICATION
 const screenWidth = Math.round(Dimensions.get('window').width);
@@ -36,7 +36,7 @@ function toString(e) {
   }
 }
 
-export default class App extends PureComponent {
+export default class App extends Component {
 
   constructor() {
 
@@ -64,7 +64,11 @@ export default class App extends PureComponent {
 
       backgroundColor: "#0062B1",
 
-      fontColor: "#FCC400"
+      fontColor: "#FCC400",
+
+      fontFamily: "Arial",
+
+      fontSize: 18
 
     };
   }
@@ -380,30 +384,112 @@ export default class App extends PureComponent {
 
         <View
           style={this.leftMenuWrapperStyles()}>
-          <ScrollView style={[styles.leftMenuInside, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor}]}>
 
+          <ScrollView
+            style={[styles.leftMenuInside, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize}]}
+            showsHorizontalScrollIndicator={false}>
 
-            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
-              <Text style={styles.subMenuTitle}>{"Compte"}</Text>
-            </View>
-
-            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor, borderTopWidth: 30}]}>
-              <Text style={styles.subMenuTitle}>{"Options"}</Text>
-              <View style={styles.submenuItem}>
-                <Text style={styles.optionsDescription}> Theme Choser </Text>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"black", borderColor:"white"}]} onPress={()=>{this.setState({backgroundColor:"black" , fontColor:"white" })}}  ></TouchableOpacity>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"white", borderColor:"black"}]} onPress={()=>{this.setState({backgroundColor:"white" , fontColor:"black" })}}  ></TouchableOpacity>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"yellow",borderColor:"blue"}]} onPress={()=>{this.setState({backgroundColor:"yellow" , fontColor:"blue" })}}   ></TouchableOpacity>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"blue",  borderColor:"yellow"}]} onPress={()=>{this.setState({backgroundColor:"blue" , fontColor:"yellow" })}} ></TouchableOpacity>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"green", borderColor:"red"}]}   onPress={()=>{this.setState({backgroundColor:"green" , fontColor:"red" })}}    ></TouchableOpacity>
-                <TouchableOpacity style={[styles.themeChoser, {backgroundColor:"red",   borderColor:"green"}]}   onPress={()=>{this.setState({backgroundColor:"red" , fontColor:"green" })}}  ></TouchableOpacity>
+            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize, borderTopWidth: 30}]}>
+              <Text style={[styles.subMenuTitle,{color:this.state.backgroundColor, fontFamily:this.state.fontFamily}]}>{"Compte"}</Text>
+              
+              <View style={[styles.submenuItem,{color:this.state.backgroundColor, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]}>
+                <Text style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor}]}> Pseudo </Text>
+                <TextInput
+                  style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor, textAlign: "center"}]}
+                  placeholderTextColor = {this.state.fontColor}
+                  placeholder={"Pseudo"}
+                ></TextInput>
               </View>
+
+              <View style={[styles.submenuItem,{color:this.state.backgroundColor, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]}>
+                <Text style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor}]}> Naissance </Text>
+                
+                <DatePicker
+                  style={{width: 160}}
+                  date={"03-03-1990"}
+                  mode="date"
+                  placeholder="select date"
+                  format="DD-MM-YYYY"
+                  minDate="01-01-1900"
+                  maxDate="01-01-2021"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36,
+                      marginRight: 10
+                    }
+                  }}
+                  onDateChange={(date) => {this.setState({date: date})}}
+                />
+              </View>
+
+
             </View>
 
+            <View style={[styles.subMenu, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize, borderTopWidth: 30}]}>
+              
+              <Text style={[styles.subMenuTitle,{color:this.state.backgroundColor, fontFamily:this.state.fontFamily}]}>{"Options"}</Text>
+
+              <View style={[styles.submenuItem,{color:this.state.backgroundColor, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]}>
+                <Text style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor}]}> Theme Choser </Text>
+                <Text style={[styles.themeChoser, {color: "white", backgroundColor:"black", borderColor:"white"}]} onPress={()=>{this.setState({backgroundColor:"black" , fontColor:"white" })}}  >{"Az"}</Text>
+                <Text style={[styles.themeChoser, {color: "black", backgroundColor:"white", borderColor:"black"}]} onPress={()=>{this.setState({backgroundColor:"white" , fontColor:"black" })}}  >{"Az"}</Text>
+                <Text style={[styles.themeChoser, {color: "blue", backgroundColor:"yellow",borderColor:"blue"}]} onPress={()=>{this.setState({backgroundColor:"yellow" , fontColor:"blue" })}}   >{"Az"}</Text>
+                <Text style={[styles.themeChoser, {color: "yellow", backgroundColor:"blue",  borderColor:"yellow"}]} onPress={()=>{this.setState({backgroundColor:"blue" , fontColor:"yellow" })}} >{"Az"}</Text>
+                <Text style={[styles.themeChoser, {color: "red", backgroundColor:"green", borderColor:"red"}]}   onPress={()=>{this.setState({backgroundColor:"green" , fontColor:"red" })}}    >{"Az"}</Text>
+                <Text style={[styles.themeChoser, {color: "green", backgroundColor:"red",   borderColor:"green"}]}   onPress={()=>{this.setState({backgroundColor:"red" , fontColor:"green" })}}  >{"Az"}</Text>
+              </View>
+
+              <View style={[styles.submenuItem,{color:this.state.backgroundColor, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]}>
+                <Text style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor}]}> Font choser </Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Arial"}]} onPress={()=>{this.setState({fontFamily:"Arial"})}}>Arial</Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Georgia"}]} onPress={()=>{this.setState({fontFamily:"Georgia"})}}>Georgia</Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Futura"}]} onPress={()=>{this.setState({fontFamily:"Futura"})}}>Futura</Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Helvetica"}]} onPress={()=>{this.setState({fontFamily:"Helvetica"})}}>Helvetica</Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Optima"}]} onPress={()=>{this.setState({fontFamily:"Optima"})}}>Optima</Text>
+                <Text style={[styles.fontChoser, {backgroundColor:this.state.backgroundColor, fontSize:this.state.fontSize, color:this.state.fontColor, borderColor:this.state.fontColor, fontFamily:"Verdana"}]} onPress={()=>{this.setState({fontFamily:"Verdana"})}}>Verdana</Text>
+              </View>
+
+
+              <View style={[styles.submenuItem,{color:this.state.backgroundColor, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]}>
+                <Text style={[styles.optionsDescription,{fontFamily:this.state.fontFamily, color:this.state.fontColor}]}> Font size </Text>
+                <VerticalSlider
+                  style={styles.fontSizeChoser}
+                  value={this.state.fontSize}
+                  disabled={false}
+                  min={8}
+                  max={32}
+                  onChange={(value: number) => {
+                    this.setState({fontSize: value})
+                  }}
+                  onComplete={(value: number) => {
+                    this.setState({fontSize: value})
+                  }}
+                  width={0.1 * screenWidth}
+                  height={200}
+                  step={1}
+                  borderRadius={5}
+                  minimumTrackTintColor={"gray"}
+                  maximumTrackTintColor={"tomato"}
+                  ballIndicatorColor={"gray"}
+                  ballIndicatorTextColor={"white"}
+                >
+                </VerticalSlider>
+              </View>
+
+            </View>
 
           </ScrollView>
+
           <TouchableOpacity 
-            style={styles.leftMenuTransparentCloser}
+            style={[styles.leftMenuTransparentCloser, {borderColor: this.state.fontColor}]}
             onPress = {() => {this.toggleLeftMenu();}}>
           </TouchableOpacity>
         </View>
@@ -412,11 +498,12 @@ export default class App extends PureComponent {
           style={styles.suggestionsList}
           data={this.state.lastSuggestions}
           horizontal={true}
-          renderItem = {item=>(<Text style={styles.suggestion} onPress={()=>{this.askQuestion(item.item.text);}}>{item.item.text+"("+item.item.count+")"}</Text>)}>
+          showsHorizontalScrollIndicator={false}
+          renderItem = {item=>(<Text style={[styles.suggestion,{fontFamily:this.state.fontFamily}]} onPress={()=>{this.askQuestion(item.item.text);}}>{item.item.text+"("+item.item.count+")"}</Text>)}>
         </FlatList>
 
         <TextInput
-          style={[styles.flexTextInput, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, borderColor: this.state.fontColor, borderWidth: 6}]}
+          style={[styles.flexTextInput, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, borderColor: this.state.fontColor, fontFamily:this.state.fontFamily}]}
           maxLength={33}
           placeholderTextColor = "#888888ff"
           placeholder = {this.state.placeholder}
@@ -427,10 +514,11 @@ export default class App extends PureComponent {
         </TextInput>
 
         <FlatList
-          style={[styles.capsuleLists, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor}]}
+          style={[styles.capsuleLists, {backgroundColor:this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize}]}
           data={this.state.data}
+          showsHorizontalScrollIndicator={false}
           renderItem = {item => (
-            <Highlighter style={[styles.capsule, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, borderColor:this.state.fontColor}]} 
+            <Highlighter style={[styles.capsule, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]} 
               highlightStyle={{backgroundColor: 'yellow'}}
               searchWords={[this.state.request]}
               textToHighlight = 
@@ -446,7 +534,7 @@ export default class App extends PureComponent {
           )}>
         </FlatList>
 
-        <Text style = {[styles.capsuleLists, {color:this.state.fontColor}]}>
+        <Text style = {[styles.capsuleLists, {color:this.state.fontColor, fontSize:this.state.fontSize}]}>
           {"  " + this.state.description}
         </Text>
 
@@ -489,7 +577,8 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     left: 0,
-    right: 0
+    right: 0,
+    fontFamily: "Arial"
   },
   loadingBlocker:{
     top: 0,
@@ -506,19 +595,23 @@ const styles = StyleSheet.create({
     left:0,
     width:0.7 * screenWidth,
     height: screenHeight,
-    backgroundColor: '#000000ff',
     zIndex: 6,
     paddingTop: 0.2 * screenHeight
   },
   subMenu:{
+    flexDirection: 'row',
+    flexWrap: "wrap",
     width:0.7 * screenWidth,
-    backgroundColor:'orange',
     alignSelf: 'flex-start'
   },
   subMenuTitle:{
+    position:"absolute",
+    top:-33,
+    right:30,
     color:"black",
     fontSize: 30,
-    fontWeight:'bold'
+    fontWeight:'bold',
+    textAlign: "center"
   },
   submenuItem:{
     alignSelf: 'flex-start',
@@ -528,26 +621,49 @@ const styles = StyleSheet.create({
     minHeight: 0.06 * screenWidth,
     margin: 0.02 * screenHeight,
     borderRadius: 0.015 * screenHeight,
-    backgroundColor: "white"
+    borderWidth:4
   },
   optionsDescription:{
-    color:"black"
+    color:"black",
+    marginBottom: 20,
+    fontWeight:'bold'
+  },
+  photoChoser:{
+    width:120,
+    height:120,    
   },
   themeChoser:{
     width:40,
     height:40,
-    borderWidth:20,
+    borderWidth:5,
     borderRadius:20
+  },
+  fontChoser:{
+    width:100,
+    height:40,
+    borderWidth:5,
+    borderRadius:20,
+    fontSize:14,
+    marginBottom:4,
+    marginLeft:4,
+    marginRight:4,
+    textAlign: "center"
+  },
+  fontSizeChoser:{
+    height:200,
+    width:0.1 * screenWidth,
+    marginLeft:30
   },
   optionsSwitch:{
   },
   leftMenuTransparentCloser:{
     position:"absolute",
     right:0,
-    width:0.3 * screenWidth,
+    width:0.3 * screenWidth + 20,
     height: screenHeight,
     zIndex: 6,
     backgroundColor: 'transparent',
+    borderLeftWidth: 20
   },
   flexTextInput: {
     position:'absolute',
@@ -559,7 +675,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#112666ff',
     fontSize: 28,
     borderRadius: 10,
-    color: "white"
+    color: "white",
+    borderWidth: 6
   },
   capsuleLists: {
     flex:1,
