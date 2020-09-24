@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, PureComponent, Component, useState } from 'react';
 import { Animated, FlatList, SafeAreaView, TextInput, Keyboard, Dimensions, Slider, Picker, TouchableHighlight, StatusBar, Switch, ScrollView, Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
 import Constants from 'expo';
-import AsyncStorage from "react-native";
+import {AsyncStorage} from "react-native";
 import RadioForm from 'react-native-simple-radio-button';
 import Highlighter from 'react-native-highlight-words';
 import VerticalSlider from 'rn-vertical-slider';
 import DatePicker from 'react-native-datepicker';
+import { BlurView } from 'expo-blur';
 
 
 //TOUTES LES VARIABLES DONT ON A BESOIN POUR L'APPLICATION
@@ -60,7 +61,7 @@ export default class App extends Component {
 
       leftMenuOnOff: false,
 
-      leftMenuPosition: -screenWidth * 0.7,
+      leftMenuPosition: -screenWidth * 1.,
 
       backgroundColor: "#0062B1",
 
@@ -371,7 +372,6 @@ export default class App extends Component {
 
       <ScrollView style={[styles.mainContainer, {backgroundColor: this.state.backgroundColor}]}>
 
-        <View style={styles.loadingBlocker}></View>
 
         <TouchableOpacity
           style={styles.burger}
@@ -381,6 +381,24 @@ export default class App extends Component {
             source={require("./assets/images/logo-Beedeez.png")}>
           </Image> 
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.addCapsule}
+          onPress = {() => {}}>
+          <Image
+            style={styles.miniLogo}
+            source={require("./assets/images/plus-flat.png")}>
+          </Image> 
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.heart}
+          onPress = {() => {}}>
+          <Image
+            style={styles.miniLogo}
+            source={require("./assets/images/heart.webp")}>
+          </Image> 
+        </TouchableOpacity>        
 
         <View
           style={this.leftMenuWrapperStyles()}>
@@ -491,6 +509,7 @@ export default class App extends Component {
           <TouchableOpacity 
             style={[styles.leftMenuTransparentCloser, {borderColor: this.state.fontColor}]}
             onPress = {() => {this.toggleLeftMenu();}}>
+            <BlurView intensity={40} style={[styles.leftMenuTransparentCloser, {borderColor: this.state.fontColor}]}></BlurView>
           </TouchableOpacity>
         </View>
 
@@ -518,19 +537,30 @@ export default class App extends Component {
           data={this.state.data}
           showsHorizontalScrollIndicator={false}
           renderItem = {item => (
-            <Highlighter style={[styles.capsule, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]} 
-              highlightStyle={{backgroundColor: 'yellow'}}
-              searchWords={[this.state.request]}
-              textToHighlight = 
-              {
-                "\n"+
-                "Titre: " + item.item.caps.title + "\n\n" + 
-                "Sommaire: " + item.item.caps.summary + "\n\n" + 
-                "Niveau: " + item.item.caps.level + "\n\n" + 
-                "Langue: " + item.item.caps.lang + "\n\n" + 
-                "Date: " + item.item.caps.lastUpdate  + "\n\n"
-              }>
-            </Highlighter>
+            <View>
+              <Highlighter style={[styles.capsule, {backgroundColor: this.state.backgroundColor, color:this.state.fontColor, fontSize:this.state.fontSize, borderColor:this.state.fontColor, fontSize:this.state.fontSize, fontFamily:this.state.fontFamily}]} 
+                highlightStyle={{backgroundColor: 'yellow'}}
+                searchWords={[this.state.request]}
+                textToHighlight = 
+                {
+                  "\n"+
+                  "Titre: " + item.item.caps.title + "\n\n" + 
+                  "Sommaire: " + item.item.caps.summary + "\n\n" + 
+                  "Niveau: " + item.item.caps.level + "\n\n" + 
+                  "Langue: " + item.item.caps.lang + "\n\n" + 
+                  "Date: " + item.item.caps.lastUpdate  + "\n\n"
+                }>
+              </Highlighter> 
+
+              <TouchableOpacity
+                style={styles.miniHeart}
+                onPress = {() => {}}>
+                <Image
+                  style={styles.miniLogo}
+                  source={require("./assets/images/heart.webp")}>
+                </Image> 
+              </TouchableOpacity> 
+            </View>
           )}>
         </FlatList>
 
@@ -713,9 +743,36 @@ const styles = StyleSheet.create({
     height:64,
     zIndex:4
   },
+  addCapsule:{
+    position:'absolute',
+    top: screenHeight - 68,
+    left: 98,
+    width:64,
+    height:64,
+    zIndex:3,
+    backgroundColor: "black",
+    borderRadius: 32
+  },
+  heart:{
+    position:'absolute',
+    top: screenHeight - 68,
+    left: 24,
+    width:64,
+    height:64,
+    zIndex:3,
+    backgroundColor: "black",
+    borderRadius: 32
+  },
   miniLogo: {
     width:64,
     height:64
+  },
+  miniHeart:{
+    position:"absolute",
+    width:48,
+    height:48,
+    right:32,
+    bottom:0
   },
   miniFlagWorld:{
     position:'absolute',
